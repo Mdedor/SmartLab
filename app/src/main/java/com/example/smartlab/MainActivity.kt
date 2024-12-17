@@ -21,6 +21,10 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.smartlab.layouts.Auntification
 import com.example.smartlab.layouts.OnBoard
 import com.example.smartlab.ui.theme.SmartLabTheme
 
@@ -36,44 +40,56 @@ class MainActivity : ComponentActivity() {
             val pagerState = rememberPagerState(pageCount = {
                 3
             })
+            val navController = rememberNavController()
+
             SmartLabTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HorizontalPager(state = pagerState) {page->
-                        if (page == 0) {
+                        NavHost(navController, startDestination = "main"){
+                            composable("main"){
+                                if (page == 0) {
+                                    OnBoard(
+                                        buttomText = "Пропустить", headeText = "Анализы",
+                                        descriptionText = "Экспресс сбор и получение проб",
+                                        dotsImageVector = ImageVector.vectorResource(R.drawable.group_1),
+                                        illustration = ImageBitmap.imageResource(R.drawable.photo_1),
+                                        modifier = Modifier.padding(innerPadding),
+                                        navController = navController
+                                    )
+                                }else if (page==1) {
+                                    OnBoard(
+                                        buttomText = "Пропустить", headeText = "Уведомления",
+                                        descriptionText = "Вы быстро узнаете о результатах",
+                                        dotsImageVector = ImageVector.vectorResource(R.drawable.group_2),
+                                        illustration = ImageBitmap.imageResource(R.drawable.photo_2),
+                                        modifier = Modifier.padding(innerPadding),
+                                        navController = navController)
 
-                            OnBoard(
-                                buttomText = "Пропустить", headeText = "Анализы",
-                                descriptionText = "Экспресс сбор и получение проб",
-                                dotsImageVector = ImageVector.vectorResource(R.drawable.group_1),
-                                illustration = ImageBitmap.imageResource(R.drawable.photo_1),
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }else if (page==1) {
+                                }else{
 
-                            OnBoard(
-                                buttomText = "Пропустить", headeText = "Уведомления",
-                                descriptionText = "Вы быстро узнаете о результатах",
-                                dotsImageVector = ImageVector.vectorResource(R.drawable.group_2),
-                                illustration = ImageBitmap.imageResource(R.drawable.photo_2),
-                                modifier = Modifier.padding(innerPadding))
-                        }else{
-
-                            OnBoard(
-                                buttomText = "Завершить", headeText = "Мониторинг",
-                                descriptionText = "Наши врачи всегда наблюдают \n" +
-                                        "за вашими показателями здоровья",
-                                dotsImageVector = ImageVector.vectorResource(R.drawable.group_3),
-                                illustration = ImageBitmap.imageResource(R.drawable.photo_3),
-                                modifier = Modifier.padding(innerPadding))
+                                    OnBoard(
+                                        buttomText = "Завершить", headeText = "Мониторинг",
+                                        descriptionText = "Наши врачи всегда наблюдают \n" +
+                                                "за вашими показателями здоровья",
+                                        dotsImageVector = ImageVector.vectorResource(R.drawable.group_3),
+                                        illustration = ImageBitmap.imageResource(R.drawable.photo_3),
+                                        modifier = Modifier.padding(innerPadding),
+                                        navController = navController)
+                                }
+                            }
+                            composable("email"){
+                                Auntification()
+                            }
                         }
 
-
-
                     }
-
                 }
             }
         }
     }
 }
 
+@Composable
+fun load(modifier: Modifier = Modifier) {
+
+}

@@ -21,6 +21,10 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.controls.ui.theme.Components.OnboardDescription
 import com.example.controls.ui.theme.Components.OnboardHeader
 import com.example.controls.ui.theme.Components.TextButton
@@ -29,11 +33,11 @@ import com.example.smartlab.R
 import org.w3c.dom.Text
 
 @Composable
-fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,descriptionText: String, dotsImageVector: ImageVector,illustration: ImageBitmap) {
+fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,descriptionText: String, dotsImageVector: ImageVector,illustration: ImageBitmap,navController: NavController) {
     Column(modifier = modifier.fillMaxSize().padding(20.dp)) {
 
         Row {
-            TextButton(text = buttomText, modifier = Modifier.weight(1f), onClick = {})
+            TextButton(text = buttomText, modifier = Modifier.weight(1f), onClick = {navController.navigate("email")})
             Image(ImageVector.vectorResource(R.drawable.shape),null, modifier = Modifier.weight(1f))
         }
         Spacer(Modifier.height(29.dp))
@@ -50,9 +54,16 @@ fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,d
 @Preview
 @Composable
 private fun OnBoardPrewiew() {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = "email"){
+        composable("email"){
+            Auntification()
+        }
+    }
     OnBoard(
         buttomText = "Пропустить", headeText = "Анализы",
         descriptionText = "Экспресс сбор и получение проб",
         dotsImageVector = ImageVector.vectorResource(R.drawable.group_1),
-        illustration = ImageBitmap.imageResource(R.drawable.photo_1))
+        illustration = ImageBitmap.imageResource(R.drawable.photo_1),
+        navController = navController)
 }
