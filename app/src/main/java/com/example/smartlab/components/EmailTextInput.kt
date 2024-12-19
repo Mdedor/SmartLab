@@ -1,6 +1,7 @@
 package com.example.smartlab.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -13,25 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.trace
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
 
 @Composable
-fun TextInput(modifier: Modifier = Modifier, placeholder: String, enabled: Boolean = true) {
-    var text by remember { mutableStateOf("") }
+fun TextInput(modifier: Modifier = Modifier, placeholder: String, enabled: Boolean = true,onTextChange: (String) -> Unit,text:String) {
+
 
 
     OutlinedTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = onTextChange,
         modifier = modifier,
         enabled = enabled,
-        readOnly = true,
+
         placeholder = {
             Text(
                 text = placeholder,
@@ -55,11 +58,13 @@ fun TextInput(modifier: Modifier = Modifier, placeholder: String, enabled: Boole
             cursorColor = AccentColor
         ),
         shape = RoundedCornerShape(10.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
 
 @Preview
 @Composable
 private fun TextInputPreview() {
-    TextInput(placeholder = "Поле для ввода с подсказкой")
+    var text by remember { mutableStateOf("") }
+    TextInput(placeholder = "Поле для ввода с подсказкой", enabled = true, onTextChange = { if (it.length <= 320) text = it }, text = text)
 }

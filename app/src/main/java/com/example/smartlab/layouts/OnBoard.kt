@@ -1,5 +1,6 @@
 package com.example.smartlab.layouts
 
+import android.app.Activity.MODE_PRIVATE
 import android.media.audiofx.AudioEffect.Descriptor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -33,11 +34,11 @@ import com.example.smartlab.R
 import org.w3c.dom.Text
 
 @Composable
-fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,descriptionText: String, dotsImageVector: ImageVector,illustration: ImageBitmap,navController: NavController) {
+fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,descriptionText: String, dotsImageVector: ImageVector,illustration: ImageBitmap, onClick: () -> Unit = {}) {
     Column(modifier = modifier.fillMaxSize().padding(20.dp)) {
 
         Row {
-            TextButton(text = buttomText, modifier = Modifier.weight(1f), onClick = {navController.navigate("email")})
+            TextButton(text = buttomText, modifier = Modifier.weight(1f), onClick = {onClick() })
             Image(ImageVector.vectorResource(R.drawable.shape),null, modifier = Modifier.weight(1f))
         }
         Spacer(Modifier.height(29.dp))
@@ -64,6 +65,5 @@ private fun OnBoardPrewiew() {
         buttomText = "Пропустить", headeText = "Анализы",
         descriptionText = "Экспресс сбор и получение проб",
         dotsImageVector = ImageVector.vectorResource(R.drawable.group_1),
-        illustration = ImageBitmap.imageResource(R.drawable.photo_1),
-        navController = navController)
+        illustration = ImageBitmap.imageResource(R.drawable.photo_1))
 }
