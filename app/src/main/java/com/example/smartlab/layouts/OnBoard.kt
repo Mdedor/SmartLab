@@ -36,7 +36,6 @@ import org.w3c.dom.Text
 @Composable
 fun OnBoard(modifier: Modifier = Modifier,buttomText: String,headeText: String,descriptionText: String, dotsImageVector: ImageVector,illustration: ImageBitmap, onClick: () -> Unit = {}) {
     Column(modifier = modifier.fillMaxSize().padding(20.dp)) {
-
         Row {
             TextButton(text = buttomText, modifier = Modifier.weight(1f), onClick = {onClick() })
             Image(ImageVector.vectorResource(R.drawable.shape),null, modifier = Modifier.weight(1f))

@@ -19,3 +19,5 @@ val InputFocusedBorderColor = Color(0xFFB8C1CC)
 val EmailColor = Color(0xFF7E7E9A)
 val AccentColor = Color(0xFF1A6FEE)
 val AccentInactiveColor = Color(0xFFC9D4FB)
+val BorderColor = Color(0xFFF4F4F4)
+
