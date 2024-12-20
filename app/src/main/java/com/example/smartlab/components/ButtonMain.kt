@@ -26,10 +26,10 @@ fun ButtonCategory(modifier: Modifier = Modifier, onClick: () -> Unit = {}, Enab
         enabled = Enable,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = AccentColor,
-            contentColor = Color.White,
-            disabledContentColor = EmailColor,
-            disabledContainerColor = InputBGColor
+            containerColor = EmailColor,
+            contentColor = InputBGColor,
+            disabledContentColor = AccentColor,
+            disabledContainerColor = Color.White,
         )
     ) {
         Text(

@@ -21,6 +21,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
 import com.example.smartlab.layouts.Auntification
 import com.example.smartlab.layouts.CodeEmail
 import com.example.smartlab.layouts.Main
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     var illustration = R.drawable.photo_2
                     var start = "main"
                     if (status){
-                        start = "core" // Должен стоять email но для тестирования стоит core
+                        start = "email" // Должен стоять email но для тестирования стоит core
                     }
 
 
@@ -98,7 +99,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable("email"){
-                            Auntification(modifier = Modifier.padding(innerPadding), onClick = {navController.navigate("code")})
+                            Auntification(modifier = Modifier.padding(innerPadding), onClick = {
+                                navController.navigate("code")
+                            })
                         }
                         composable("code"){
                             CodeEmail(modifier = Modifier.padding(innerPadding), onClick = {navController.navigate("email")},navController=navController)

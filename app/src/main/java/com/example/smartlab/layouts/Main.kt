@@ -24,7 +24,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,6 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartlab.Actions
+import com.example.smartlab.Categories
 import com.example.smartlab.Products
 import com.example.smartlab.R
 import com.example.smartlab.RetrofitHelper
@@ -60,13 +64,60 @@ import retrofit2.Response
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Main(modifier: Modifier = Modifier) {
-
+    var id :Int = 0
+    var name :String = ""
+    var category_id :Int = 0
+    var price : Float = 0.0F
     var text by remember { mutableStateOf("") }
     var showPromotions by remember { mutableStateOf(true) }
     var refreshing by remember { mutableStateOf(false) }
+    val productsList = remember { mutableStateListOf<Products>() }
+    val categoriesList = remember { mutableStateListOf<Categories>() }
+    val actionsList = remember { mutableStateListOf<Actions>() }
     val pagerState = rememberPagerState(pageCount = {
         3
     })
+    LaunchedEffect(Unit) {
+        RetrofitHelper.productInterface.getProsucts().enqueue(object : Callback<List<Products>> {
+            override fun onResponse(call: Call<List<Products>>, response: Response<List<Products>>) {
+                response.body()?.let { products ->
+                    productsList.clear()
+                    productsList.addAll(products)
+                }
+            }
+
+            override fun onFailure(p0: Call<List<Products>>, p1: Throwable) {
+                Log.v("error","error")
+            }
+        })
+        RetrofitHelper.categoryInterface.getCategory().enqueue(object :Callback<List<Categories>>{
+            override fun onResponse(p0: Call<List<Categories>>, p1: Response<List<Categories>>) {
+                p1.body()?.let { category->
+                    categoriesList.clear()
+                    categoriesList.addAll(category)
+                }
+            }
+
+            override fun onFailure(p0: Call<List<Categories>>, p1: Throwable) {
+                Log.v("error","error")
+            }
+
+        })
+        RetrofitHelper.actionsInterface.getActions().enqueue(object :Callback<List<Actions>>{
+            override fun onResponse(p0: Call<List<Actions>>, p1: Response<List<Actions>>) {
+                p1.body()?.let { actions->
+                    actionsList.clear()
+                    actionsList.addAll(actions)
+                }
+            }
+
+            override fun onFailure(p0: Call<List<Actions>>, p1: Throwable) {
+                Log.v("error","error")
+            }
+
+
+        })
+    }
     Column(modifier = Modifier
         .fillMaxSize()
         .pointerInput(Unit) {
@@ -92,22 +143,26 @@ fun Main(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
-            repeat(10){
+
+            actionsList.forEach{ actions->
                 Box(modifier = Modifier.padding(8.dp)){
                     Column(modifier = Modifier.fillMaxWidth(0.8f).clip(shape = RoundedCornerShape(12.dp)).background(Color.Blue).padding(16.dp)) {
                         StocksMainText(
-                            text = "Чек-ап для мужчин"
+                            text = actions.title
                         )
                         StocksDescriptText(
-                            text = "9 исследований"
+                            text = actions.description
                         )
                         StocksMainText(
-                            text = "8000"
+                            text = actions.price.toString()
                         )
                     }
                 }
-
             }
+
+
+                
+
 
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -122,26 +177,30 @@ fun Main(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
-            Box(modifier = Modifier.padding(8.dp)){
-                ButtonCategory(onClick = {}, text = "Популярные", Enable = true, modifier = Modifier.height(48.dp))
-            }
-            repeat(10) {
+            categoriesList.forEach {category->
                 Box(modifier = Modifier.padding(8.dp)){
-                    ButtonCategory(onClick = {}, text = "Популярные", Enable = false, modifier = Modifier.height(48.dp))
+                    ButtonCategory(onClick = {}, text = category.name, Enable = true, modifier = Modifier.height(48.dp))
                 }
-
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-            repeat(10){
+
+            productsList.forEach { product->
+                var categor:String = ""
                 Box(modifier=Modifier.padding(8.dp).border(width = 1.dp, shape = RoundedCornerShape(12.dp),color = BorderColor).padding(16.dp)){
                     Column {
-                        CategoryHeaderText( text="ПЦР-тест на определение РНК коронавируса стандартный")
+                        CategoryHeaderText( text=product.name)
                         Row {
+
                             Column(modifier = Modifier.weight(1f)) {
+                                categoriesList.forEach {categories ->
+                                    if (product.category_id == categories.id){
+                                        categor = categories.name.toString()
+                                    }
+                                }
                                 Text(
-                                    text = "Каталог анализов",
+                                    text = categor,
                                     modifier = modifier.fillMaxWidth(),
                                     color = OnboardDescriptionColor,
                                     fontSize = 14.sp,
@@ -150,7 +209,7 @@ fun Main(modifier: Modifier = Modifier) {
                                     fontFamily = FontFamily(Font(R.font.nunito_extralight))
                                 )
                                 Text(
-                                    text = "1800 р",
+                                    text = product.price.toString(),
                                     modifier = modifier.fillMaxWidth(),
                                     color = Color.Black,
                                     fontSize = 14.sp,
@@ -161,35 +220,19 @@ fun Main(modifier: Modifier = Modifier) {
                             }
                             ButtonCategory(onClick = {
                                 Log.v("433432","ewqeqwe")
-                                RetrofitHelper.productInterface.getProsucts().enqueue(object :Callback<List<Products>>{
-                                    override fun onResponse(p0: Call<List<Products>>, p1: Response<List<Products>>) {
-                                        val productsList = p1.body()
-                                        if(productsList!=null){
-                                            productsList.forEach{products ->
-                                                val id = products.id
-                                                val name = products.name
-                                                val category_id = products.category_id
-                                                val price = products.price
-                                                Log.v("product","${id},${name},${category_id},${price}")
-                                            }
-                                        }
-                                    }
 
-                                    override fun onFailure(p0: Call<List<Products>>, p1: Throwable) {
-                                        Log.v("error","error")
-                                    }
-
-                                })
                             }, text = "Добавить", Enable = true, modifier = Modifier.height(48.dp))
                         }
                     }
                 }
             }
 
+            }
+
         }
     }
 
-}
+
 
 @Preview
 @Composable
