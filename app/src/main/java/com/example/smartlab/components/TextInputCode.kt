@@ -28,9 +28,7 @@ fun TextInputCode(modifier: Modifier = Modifier) {
     TextField(
         value = text,
         onValueChange = {
-            if (it.length <= 1){
-                text = it
-            }
+            text = it
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
 

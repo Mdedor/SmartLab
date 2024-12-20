@@ -21,7 +21,7 @@ import com.example.smartlab.ui.theme.InputBGColor
 fun ButtonCategory(modifier: Modifier = Modifier, onClick: () -> Unit = {}, Enable:Boolean=true, text:String) {
 
     Button(
-        onClick = {},
+        onClick = {onClick()},
         modifier=modifier,
         enabled = Enable,
         shape = RoundedCornerShape(10.dp),

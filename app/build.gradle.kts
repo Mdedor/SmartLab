@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation (libs.androidx.foundation)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.retrofit)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,6 +1,8 @@
 package com.example.smartlab.layouts
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,8 +35,9 @@ import com.example.smartlab.components.TextInput
 import com.example.smartlab.components.Title
 
 @Composable
-fun Auntification(modifier: Modifier = Modifier ) {
+fun Auntification(modifier: Modifier = Modifier, onClick: () -> Unit = {} ) {
     var text by remember { mutableStateOf("") }
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(20.dp)) {
@@ -55,7 +58,8 @@ fun Auntification(modifier: Modifier = Modifier ) {
 
         TextInput(placeholder = "example@mail.ru", modifier = Modifier.fillMaxWidth(1f).height(72.dp), onTextChange = { if (it.length <= 320) text = it }, text = text)
         Spacer(Modifier.height(32.dp))
-        PrimaryButton(text = "Далее", Enable = text.isNotEmpty(), modifier = Modifier.fillMaxWidth(1f).height(56.dp), onClick = {})
+        val enebles = isValidT(text)
+        PrimaryButton(text = "Далее", Enable = enebles, modifier = Modifier.fillMaxWidth(1f).height(56.dp).clickable { onClick()}, onClick = {onClick()})
     }
 }
 
@@ -63,4 +67,8 @@ fun Auntification(modifier: Modifier = Modifier ) {
 @Composable
 private fun AuntificationPreview() {
     Auntification()
+}
+fun isValidT (email: String):Boolean{
+    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$".toRegex()
+    return email.matches(emailRegex)
 }

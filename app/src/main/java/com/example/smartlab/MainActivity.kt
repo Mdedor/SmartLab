@@ -1,6 +1,7 @@
 package com.example.smartlab
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.layouts.Auntification
+import com.example.smartlab.layouts.CodeEmail
+import com.example.smartlab.layouts.Main
 import com.example.smartlab.layouts.OnBoard
 import com.example.smartlab.ui.theme.SmartLabTheme
 
@@ -48,12 +51,16 @@ class MainActivity : ComponentActivity() {
                     var descriptionText = ""
                     var dotsImage = R.drawable.group_1
                     var illustration = R.drawable.photo_2
-                    NavHost(navController, startDestination = "main"){
+                    var start = "main"
+                    if (status){
+                        start = "core" // Должен стоять email но для тестирования стоит core
+                    }
+
+
+                    NavHost(navController, startDestination = start){
 
                         composable("main"){
-                            if (status){
-                                navController.navigate("email")
-                            }
+
                             HorizontalPager(state = pagerState) { page ->
                                 if (page == 0) {
                                     buttonText = "Пропустить"
@@ -85,16 +92,21 @@ class MainActivity : ComponentActivity() {
                                         val editor = sharedPreferences.edit()
                                         editor.putBoolean("key_accept", true);
                                         editor.apply()
-                                        navController.navigate("email")
+
                                     }
                                 )
                             }
                         }
                         composable("email"){
-                            Auntification()
+                            Auntification(modifier = Modifier.padding(innerPadding), onClick = {navController.navigate("code")})
+                        }
+                        composable("code"){
+                            CodeEmail(modifier = Modifier.padding(innerPadding), onClick = {navController.navigate("email")},navController=navController)
+                        }
+                        composable("core"){
+                            Main()
 
                         }
-
                     }
                 }
             }
